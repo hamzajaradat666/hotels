@@ -5,7 +5,7 @@ import { ThemeProvider } from '../contexts/ThemeContext'
 function MyApp({ Component, pageProps }: AppProps) {
   return (
       <ThemeProvider>
-        <div style={{padding:"20px"}}>
+        <div className='p-1 sm:p-12 fadeIn'>
         <AppHeader>
           <Component {...pageProps} />
         </AppHeader>

@@ -7,7 +7,7 @@ import store from "../../store/store";
 import { EmptyListStatus } from "../../enums/EmptyListStatus";
 const AppHeader = observer((props: any) => {
     const [fromDate, setFromDate] = useState(new Date());
-    const [toDate, setToDate] = useState(new Date());
+    const [toDate, setToDate] = useState(new Date("2023-12-31"));
     const onChangeFromDate = (date: Date) => {
         console.log(moment(date).format("YYYY-MM-DD"));
         setFromDate(date)

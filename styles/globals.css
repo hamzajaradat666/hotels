@@ -127,3 +127,18 @@ cardBody.title {
 .light {
   background-color: cadetblue;
 }
+@keyframes fadeInAnim {
+
+  from{
+    opacity: 0;
+  }
+
+  to{
+    opacity: 1;
+  }
+
+}
+.fadeIn{
+  animation-name: fadeInAnim;
+  animation-duration: 1s;
+}
