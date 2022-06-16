@@ -140,7 +140,7 @@ cardBody.title {
 }
 .fadeIn{
   animation-name: fadeInAnim;
-  animation-duration: 1s;
+  animation-duration: 0.4s;
 }
 /* width */
 ::-webkit-scrollbar {
