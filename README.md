@@ -2,7 +2,7 @@
 ---
 ### 1: Clone project
 git clone https://github.com/hamzajaradat666/hotels.git
-### 2: Install node dependence
+### 2: Install node dependences
 
 using <ins>npm i</ins>
 ### 3: Run app with
