@@ -18,12 +18,13 @@ const AppHeader = observer((props: any) => {
     }
     const searchHotelsByDates = () => {
         store.setEmptyListStatus(EmptyListStatus.Fetching)
+        store.setFirstSearch(true)
         store.fitlerHotelsByDates(fromDate, toDate)
     }
     return (
-        <React.Fragment>
-            <div className="border-2 border-gray-500 rounded w-full">
-                <div className="text-center bg-gray-500 w-full text-white p-4">Search Hotels</div>
+        <>
+            <div className="border-2 border-gray-500 rounded w-full" >
+                <div className="text-center bg-gray-500 w-full text-white p-4" style={{backgroundColor:"#424242"}}>Search Hotels</div>
                 <div className="grid xs:grid-cols-1 sm:grid-cols-3 p-5 w-full">
                     <div className="flex items-center mb-2">
                         <span className="mr-2 w-14">From</span>
@@ -41,7 +42,8 @@ const AppHeader = observer((props: any) => {
                 </div>
             </div>
             {props.children}
-        </React.Fragment>
+        </>
     )
 })
+
 export default AppHeader;
