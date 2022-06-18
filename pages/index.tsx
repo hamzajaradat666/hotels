@@ -7,34 +7,11 @@ import { Hotel } from "../models/HotelModel";
 import { EmptyListStatus } from "../enums/EmptyListStatus";
 import Loader from "../components/Loader";
 import HotelCard from "../components/HotelCard";
+import ErrorBoundary from "../components/ErrorBoundary";
+import SortFilterKeys from "../keys/SortFilter";
 const Hotels = observer((props: any) => {
-  const [filter, dispatchFilter] = useReducer((state: any, action: any) => {
-    let defaultFilter = [...state]
-    defaultFilter = [...defaultFilter.map(filter => {
-      return { ...filter, enabled: false }
-    })]
-    console.log(action, "Reducer");
-
-    switch (action) {
-
-      case "nameFilter":
-        defaultFilter[0].enabled = true
-        defaultFilter[0].descending = !defaultFilter[0].descending
-        console.log(defaultFilter);
-        return [...defaultFilter]
-      case "priceFilter":
-        defaultFilter[1].enabled = true
-        defaultFilter[1].descending = !defaultFilter[1].descending
-        console.log(defaultFilter);
-        return [...defaultFilter]
-    }
-  }, [
-    { type: "nameFilter", descending: false, enabled: false },
-    { type: "priceFilter", descending: false, enabled: false }
-  ])
-
   const prepareHotelsJSX = () => {
-    return store.filteredHotels.map(((p: Hotel, index: number) => <div key={p.name} id={"hotelId" + index}><Link href={`/hotels/${p.name}`}><a><HotelCard {...p} ></HotelCard></a></Link></div>))
+    return store.filteredHotels.map(((p: Hotel, index: number) => <div key={p.name} id={"hotelId" + index}><Link href={`/${p.name}`}><a><HotelCard {...p} ></HotelCard></a></Link></div>))
   }
   const prepareEmptyHotelsJSX = () => {
     switch (store.emptyListStatus) {
@@ -58,33 +35,26 @@ const Hotels = observer((props: any) => {
   }
 
   const sortByName = () => {
-    dispatchFilter("nameFilter")
-    setTimeout(() => {
-      store.setFilter(filter)
-      store.sortHotelsByName()
-    }, 100);
+    store.setSortFilter(SortFilterKeys.ByName)
+    store.sortHotelsByName()
   }
 
   const sortByPrice = () => {
-    dispatchFilter("priceFilter")
-    setTimeout(() => {
-      store.setFilter(filter)
-      store.sortHotelsByPrice()
-    }, 100);
+    store.setSortFilter(SortFilterKeys.ByPrice)
+    store.sortHotelsByPrice()
   }
   let nameFilter
   let priceFilter
-  if (filter) {
-    nameFilter = filter[0]
-    priceFilter = filter[1]
-  }
+  nameFilter = store.sortFilter[0]
+  priceFilter = store.sortFilter[1]
+
   let hotelsAvailable = store.filteredHotels.length
 
   return (
-    <>
+    <ErrorBoundary>
       {store.firstSearch ?
         <div className="border-2 border-gray-500 rounded w-full mt-3 fadeIn">
-          <div className="text-center bg-gray-500 w-full text-white p-4" style={{backgroundColor:"#424242"}}>Hotels Listing</div>
+          <div className="text-center bg-gray-500 w-full text-white p-4" style={{ backgroundColor: "#424242" }}>Hotels Listing</div>
           <div className="grid xs:grid-cols-2 sm:grid-cols-12 my-5 p-2">
             <div className="w-full col-span-4">
             </div>
@@ -94,14 +64,14 @@ const Hotels = observer((props: any) => {
             <div className="mx-2 w-10/12 col-auto sm:col-span-3">
               <button id="sortByName" onClick={() => { sortByName() }} className={`p-2 border-2 border-gray-500 rounded w-full " ${nameFilter.enabled ? "bg-slate-500 text-white" : "bg-white"} `}>
                 <div className="flex justify-around">
-                  <div className="font-bold">Sort By Name</div><img className={`self-center p-0 w-4 h-4 mx-1 ${!nameFilter.descending ? "-scale-y-100" : ""} `} src="arrow-down.png" />
+                  <div className="font-bold">Sort By Name</div><img className={`self-center p-0 w-4 h-4 mx-1 ${nameFilter.descending ? "-scale-y-100" : ""} `} src="arrow-down.png" alt="arrow icon" />
                 </div>
               </button>
             </div>
             <div className="mx-2 w-10/12 col-auto sm:col-span-3">
               <button id="sortByPrice" onClick={() => { sortByPrice() }} className={`p-2 border-2 border-gray-500 rounded w-full  ${priceFilter.enabled ? "bg-slate-500 text-white" : "bg-white"}`}>
                 <div className="flex justify-around">
-                  <div className="font-bold">Sort By Price</div><img className={`self-center p-0 w-4 h-4 mx-1 ${!priceFilter.descending ? "-scale-y-100" : ""} `} src="arrow-down.png" />
+                  <div className="font-bold">Sort By Price</div><img className={`self-center p-0 w-4 h-4 mx-1 ${priceFilter.descending ? "-scale-y-100" : ""} `} src="arrow-down.png" alt="arrow icon" />
                 </div>
               </button>
             </div>
@@ -132,7 +102,7 @@ const Hotels = observer((props: any) => {
           </div>
         </div>
         : null}
-    </>
+    </ErrorBoundary>
   )
 })
 /* export async function getServerSideProps() {
@@ -144,7 +114,6 @@ const Hotels = observer((props: any) => {
     const result = joinArr + "}]";
     store.setHotelsList([...(JSON.parse(result))])
     return {props:{hotels: [...(JSON.parse(result))]}}
-    
 } */
 
 export default Hotels;
